@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <title>Convert HTML selectors to percentages</title>
+
+        <style type="text/css">
+
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            img, td, span, a {
+                border: solid 2px orange;
+                padding: 10px;
+            }
+
+            table {
+                width: 960px;
+            }
+
+            .td1, .td2 {
+                width: 480px;
+            }
+
+        </style>
+        
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>Title</td>
+            </tr>
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td class="td1"><a href="#"><img src="image.png" alt="" width="60" height="60" class="img1"></a>
+                            </td>
+                            <td class="td2"><a href="#"><span class="text1">Text 1</span></a>
+                                <br><span class="date1">Date 1</span>
+                                <br><span class="description1">Description 1</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td3"><a href="#"><img src="image.png" alt="" width="60" height="60" class="img2"></a>
+                            </td>
+                            <td class="td4"><a href="#"><span class="text2">Text 2</span></a>
+                                <br><span class="date2">Date 2</span>
+                                <br><span class="description2">Description 2</span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div class="results"></div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        
+        <script>
+
+            $(function () {
+
+                $("*").not("html, head, meta, title, link, style, script, img, a")
+                    .each(function (index) {
+
+                    var selector = $(this).parents()
+                        .map(function () {
+                        return this.tagName;
+                    })
+                        .get().reverse().join(" ");
+
+                    if (selector) {
+                        selector += " " + $(this)[0].nodeName;
+                    }
+
+                    var id = $(this).attr("id");
+                    if (id) {
+                        selector += "#" + id;
+                    }
+
+                    var classNames = $(this).attr("class");
+                    if (classNames) {
+                        selector += "." + $.trim(classNames).replace(/\s/gi, ".");
+                    }
+
+                    // outerWidth(true) would include border, margin, and padding
+                    selector_width = $(this).width();
+                    selector_parent_width = $(this).parent().width();
+                    selector_percentage = selector_width / selector_parent_width * 100;
+                    
+                    $(this).width(selector_percentage + "%");
+                    
+                    console.log(index + ": " + selector + " (" + selector_width + " -> " + selector_percentage + "%)");
+                    
+                    $(".results").append("<p>" + index + ": " + selector + " (" + selector_width + " -> " + selector_percentage + "%)" + "</p>");
+
+                });
+
+            });
+
+        </script>
+    </body>
+</html>
