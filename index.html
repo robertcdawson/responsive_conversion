@@ -96,6 +96,10 @@
                     
                     console.log(index + ": " + selector + " (" + selector_width + " -> " + selector_percentage + "%)");
                     
+                    selector_path = selector.split(/\s+/);
+                    last_selector = selector_path[selector_path.length-1];
+                    console.log(last_selector);
+                    
                     $(".results").append("<p>" + index + ": " + selector + " (" + selector_width + " -> " + selector_percentage + "%)" + "</p>");
 
                 });
